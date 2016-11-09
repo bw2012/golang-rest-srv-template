@@ -27,34 +27,39 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	ip := r.RemoteAddr
 	header := r.Header
 
-	fmt.Println("ip --- %s", ip)
-	fmt.Println("header --- %s", header)
+	fmt.Println("remote ip --- ", ip)
+	fmt.Println("header    --- ", header)
 
+	// parse url
 	var url string = r.URL.Path[1:]
 	par := strings.Split(url, "/")
 
+	// get parameters
 	var a string = par[0]
 	var b string = par[1]
 
+	// create response
 	m := RestResponse{a, b, 1111}
 
+	// response to json
 	out, err := json.Marshal(m)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("output --- %s", string(out))
-	//fmt.Println("test")
-
-	//fmt.Fprintf(w, "test --- %s!", r.URL.Path[1:])
+	fmt.Println("output --- ", string(out))
+	
+	// put response to http
 	fmt.Fprintf(w, string(out))
-	//fmt.Fprintf(w, "test2 --- %s", b)
 }
 
 func main() {
+
+	fmt.Println("Start example rest server at port 8080")
+
 	http.HandleFunc("/restapi/", defaultHandler)
 	http.ListenAndServe(":8080", nil)
-
+	
 	//testpkg.Test();
 }
